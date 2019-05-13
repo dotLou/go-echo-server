@@ -18,7 +18,7 @@ type EchoResponse struct {
 	Headers  map[string][]string `json:"headers,omitempty"`
 	Method   string              `json:"method"`
 	Body     string              `json:"body,omitempty"`
-	Path     string              `json:"body`
+	Path     string              `json:"path"`
 	Response string              `json:"response,omitempty"`
 }
 
