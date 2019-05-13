@@ -17,7 +17,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
       - name: go-echo-server
-        image: dotlou/go-echo-server:v0.0.1
+        image: dotlou/go-echo-server:v0.0.3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
