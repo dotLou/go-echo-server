@@ -1,6 +1,6 @@
 # go-echo-server
 
-![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/dotlou/go-echo-server.svg?style=for-the-badge) ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/dotlou/go-echo-server.svg?style=for-the-badge) ![Golang v1.12](https://img.shields.io/badge/Golang-v1.12-green.svg?style=for-the-badge)
+[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/dotlou/go-echo-server.svg?style=for-the-badge)](https://hub.docker.com/r/dotlou/go-echo-server/tags) [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/dotlou/go-echo-server.svg?style=for-the-badge)](https://hub.docker.com/r/dotlou/go-echo-server/builds) ![Golang v1.12](https://img.shields.io/badge/Golang-v1.12-green.svg?style=for-the-badge)
 
 Simple echo HTTP server with a fake auth endpoint
 
