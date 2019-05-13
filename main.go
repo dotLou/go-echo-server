@@ -30,9 +30,11 @@ func main() {
 	// Routes
 	e.GET("/", hello)
 	e.POST("/", helloPost)
+	e.OPTIONS("/", helloOptions)
 	e.GET("/fakeAuth", fakeAuth, middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
 		return key == "valid-key", nil
 	}))
+	e.OPTIONS("/fakeAuth", fakeAuthOptions)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
@@ -46,6 +48,11 @@ func hello(c echo.Context) error {
 		Response: "Hello, World!",
 	}
 	return c.JSONPretty(http.StatusOK, response, "  ")
+}
+
+func helloOptions(c echo.Context) error {
+	c.Response().Header().Set(echo.HeaderAccept, "GET, POST, OPTIONS")
+	return c.String(http.StatusOK, "")
 }
 
 func helloPost(c echo.Context) error {
@@ -75,4 +82,9 @@ func fakeAuth(c echo.Context) error {
 		Response: "Hello, World!",
 	}
 	return c.JSONPretty(http.StatusOK, response, "  ")
+}
+
+func fakeAuthOptions(c echo.Context) error {
+	c.Response().Header().Set(echo.HeaderAccept, "GET, OPTIONS")
+	return c.String(http.StatusOK, "")
 }
