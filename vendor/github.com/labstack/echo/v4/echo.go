@@ -227,7 +227,7 @@ const (
 
 const (
 	// Version of Echo
-	Version = "4.1.8"
+	Version = "4.1.9"
 	website = "https://echo.labstack.com"
 	// http://patorjk.com/software/taag/#p=display&f=Small%20Slant&t=Echo
 	banner = `
@@ -344,16 +344,20 @@ func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
 	he, ok := err.(*HTTPError)
 	if ok {
 		if he.Internal != nil {
-			err = fmt.Errorf("%v, %v", err, he.Internal)
+			if herr, ok := he.Internal.(*HTTPError); ok {
+				he = herr
+			}
 		}
 	} else {
 		he = &HTTPError{
-			Code: http.StatusInternalServerError,
+			Code:    http.StatusInternalServerError,
 			Message: http.StatusText(http.StatusInternalServerError),
 		}
 	}
 	if e.Debug {
 		he.Message = err.Error()
+	} else if m, ok := he.Message.(string); ok {
+		he.Message = Map{"message": m}
 	}
 
 	// Send response
@@ -361,7 +365,7 @@ func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
 		if c.Request().Method == http.MethodHead { // Issue #608
 			err = c.NoContent(he.Code)
 		} else {
-			err = c.JSON(he.Code, he)
+			err = c.JSON(he.Code, he.Message)
 		}
 		if err != nil {
 			e.Logger.Error(err)
@@ -767,6 +771,7 @@ func WrapMiddleware(m func(http.Handler) http.Handler) MiddlewareFunc {
 		return func(c Context) (err error) {
 			m(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				c.SetRequest(r)
+				c.SetResponse(NewResponse(w, c.Echo()))
 				err = next(c)
 			})).ServeHTTP(c.Response(), c.Request())
 			return
